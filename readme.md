@@ -18,3 +18,6 @@
 - [ ] Product Service
 
 - [ ] Stock Tracking Service
+
+### Mind Map
+![Mind Map](docs/SWA%20Microservice.jpg)
