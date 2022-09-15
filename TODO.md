@@ -1,4 +1,5 @@
 
+
 ### TODO: Create Basic Structure
 
 - [X] Product Service
@@ -50,9 +51,7 @@
 
 ---  
 
-### Note: Inform teammates what you are working on:
-- Either update on Trello: [https://trello.com/b/YQffoOQR/miniproject-2](https://trello.com/b/YQffoOQR/miniproject-2)
-- Or mentioned it on readme [TODO.md](./TODO.md)
-- Or mentioned it on the teams
-
-__Need help: Let's Discuss and do it together.__
+> __Note: Please, Inform teammates what you are working on:__
+> - Either update on Trello: [https://trello.com/b/YQffoOQR/miniproject-2](https://trello.com/b/YQffoOQR/miniproject-2)
+> - Or mentioned it on readme [TODO.md](./TODO.md)
+> - Or mentioned it on the teams
