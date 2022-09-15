@@ -4,16 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.swa</groupId>
-    <artifactId>proj2</artifactId>
+    <parent>
+        <artifactId>proj2</artifactId>
+        <groupId>org.swa</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
+    <artifactId>payment</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>account-service</module>
-        <module>order-service</module>
-        <module>product-service</module>
-        <module>payment</module>
+        <module>creditcard-service</module>
     </modules>
 
     <properties>
