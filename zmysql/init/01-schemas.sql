@@ -1,0 +1,11 @@
+
+CREATE DATABASE IF NOT EXISTS `product-db`;
+CREATE DATABASE IF NOT EXISTS `account-db`;
+CREATE DATABASE IF NOT EXISTS `order-db`;
+CREATE DATABASE IF NOT EXISTS `shipping-db`;
+
+-- CREATE DATABASE IF NOT EXISTS `auth-db`;
+-- CREATE DATABASE IF NOT EXISTS `ccard-db`;
+
+
+-- GRANT ALL ON `accountdb`.* TO 'user'@'%';
