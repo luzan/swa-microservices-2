@@ -3,15 +3,21 @@
 
 ## # How to run ? _Options:_  
 __Development:__
-- Run each services using IDE. "run" icon to run
-- To run services, On their terminal type `./mvnw spring-boot:run`
-- Create jar and run. `./mvnw clean install` to build jar and `java -jar service1.jar`
+1. Running Single Service at a time:
+   - __If Using IDE (Using IntelliJ)__: Run each services by clicking their "run" icon
+   - __Without IDE (Using source code)__: On terminal of specific service, type `mvn spring-boot:run`
+   - __Only JAR file__: First, Create jar `mvn clean install` and run `java -jar target/service1.jar`
 
-__Preferred:__
-- Docker compose file, in terminal `docker compose up`
+2. Running the application using docker
+   - If cloned first time, In the root directory run `mvn clean install` or use IDE, maven -> lifecycle -> install (to create jar for all services) 
+   - Then, In terminal type: `docker compose up`. In root directory. (will run mysql, and other services)
+
+> Running mysql using docker compose here, will create multiple schemas
+> schemas to create are defined in folder - `zmysql/init/`, 01-schemas.sql file and specified in docker-compose yml
 
 __Deployment:__
-- Create kubernetes config files and use it to deploy services images on k8s cluster 
+- __Using Kubernetes:__ Create kubernetes config files and use it to deploy each services images
+  - Push all images to docker hub, and deploy using that image url
 
   
 
