@@ -1,0 +1,44 @@
+
+version: 3.9
+
+services:
+  config-server:
+    #    image: ashrawan/config-server:latest
+    ports:
+      - 8071:8071
+    build:
+      context: ./config-server
+
+  eureka-server:
+    ports:
+      - 8671:8671
+    build:
+      context: ./discovery-server/.
+    depends_on:
+      - config-server
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 15s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_CONFIG_IMPORT: config-server:http://config-server:8071/
+
+  account-service:
+    ports:
+      - 8080:8080
+    build:
+      context: ./account-service
+    depends_on:
+      - config-server
+      - eureka-server
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_CONFIG_IMPORT: config-server:http://config-server:8071/
+      EUREKA_CLIENT_URL: http://eureka-server:8671/
