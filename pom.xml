@@ -20,6 +20,8 @@
         <module>payment</module>
 
         <module>auth-service</module>
+
+        <module>stock-service</module>
     </modules>
 
     <properties>
