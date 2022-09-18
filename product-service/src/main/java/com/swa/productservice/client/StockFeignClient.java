@@ -15,5 +15,5 @@ public interface StockFeignClient {
     public ResponseEntity<?> createStock(@RequestBody StockDto stockDto);
 
     @GetMapping("/stock/product/{productId}")
-    public ResponseEntity<?> getStockByProductId(@PathVariable String productId);
+    public ResponseEntity<StockDto> getStockByProductId(@PathVariable String productId);
 }

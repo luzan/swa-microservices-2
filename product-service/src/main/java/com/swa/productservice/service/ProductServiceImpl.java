@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
 
         StockDto stockDto = StockDto.builder()
-                .upc(product.getId())
-                .quantityOnHand(productDto.getQuantity())
+                .productId(product.getId())
+                .quantity(productDto.getQuantity())
                 .build();
 
         stockFeignClient.createStock(stockDto);
@@ -44,8 +44,7 @@ public class ProductServiceImpl implements ProductService {
                 .price(savedProduct.getPrice())
                 .category(savedProduct.getCategory())
                 .vendor(savedProduct.getVendor())
-                .quantity(stockDto.getQuantityOnHand())
-//                .quantity(stockDto.getQuantity())
+                .quantity(stockDto.getQuantity())
                 .build();
 
         return savedProductDto;
@@ -64,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
                   productDto.setCategory(product.getCategory());
                   ResponseEntity<?> response = stockFeignClient.getStockByProductId(product.getId());
                   StockDto stockDto = (StockDto) response.getBody();
-                  productDto.setQuantity(stockDto.getQuantityOnHand());
+                  productDto.setQuantity(stockDto.getQuantity());
                   return productDto;
               }).collect(Collectors.toList());
     }
@@ -83,8 +82,7 @@ public class ProductServiceImpl implements ProductService {
                 .price(product.getPrice())
                 .category(product.getCategory())
                 .vendor(product.getVendor())
-                .quantity(stockDto.getQuantityOnHand())
-//                .quantity(stockDto.getQuantity())
+                .quantity(stockDto.getQuantity())
                 .build();
 
         return productDto;

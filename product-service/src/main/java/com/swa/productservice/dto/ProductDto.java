@@ -16,5 +16,5 @@ public class ProductDto {
     private Double price;
     private String vendor;
     private Category category;
-    private Integer quantity;
+    private Long quantity;
 }
