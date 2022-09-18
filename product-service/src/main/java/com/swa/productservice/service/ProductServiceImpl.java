@@ -6,12 +6,14 @@ import com.swa.productservice.dto.StockDto;
 import com.swa.productservice.entities.Product;
 import com.swa.productservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
@@ -30,8 +32,8 @@ public class ProductServiceImpl implements ProductService{
         Product savedProduct = productRepository.save(product);
 
         StockDto stockDto = StockDto.builder()
-                .productId(product.getId())
-                .quantity(productDto.getQuantity())
+                .upc(product.getId())
+                .quantityOnHand(productDto.getQuantity())
                 .build();
 
         stockFeignClient.createStock(stockDto);
@@ -42,23 +44,38 @@ public class ProductServiceImpl implements ProductService{
                 .price(savedProduct.getPrice())
                 .category(savedProduct.getCategory())
                 .vendor(savedProduct.getVendor())
-                .quantity(stockDto.getQuantity())
+                .quantity(stockDto.getQuantityOnHand())
+//                .quantity(stockDto.getQuantity())
                 .build();
 
         return savedProductDto;
     }
 
     @Override
-    public List<Product> findAllProduct() {
-        List<Product> productList =  productRepository.findAll();
-        return productList;
+    public List<ProductDto> findAllProduct() {
+      return productRepository.findAll()
+              .stream()
+              .map(product -> {
+                  ProductDto productDto = new ProductDto();
+                  productDto.setId(product.getId());
+                  productDto.setProductName(product.getProductName());
+                  productDto.setVendor(product.getVendor());
+                  productDto.setPrice(product.getPrice());
+                  productDto.setCategory(product.getCategory());
+                  ResponseEntity<?> response = stockFeignClient.getStockByProductId(product.getId());
+                  StockDto stockDto = (StockDto) response.getBody();
+                  productDto.setQuantity(stockDto.getQuantityOnHand());
+                  return productDto;
+              }).collect(Collectors.toList());
     }
 
     @Override
     public ProductDto getProductById(String id) {
         Product product = productRepository.findById(id).get();
 
-        StockDto stockDto = (StockDto) stockFeignClient.getStockByProductId(id).getBody();
+        ResponseEntity<?> response = stockFeignClient.getStockByProductId(id);
+
+        StockDto stockDto = (StockDto) response.getBody();
 
         ProductDto productDto = ProductDto.builder()
                 .id(product.getId())
@@ -66,8 +83,10 @@ public class ProductServiceImpl implements ProductService{
                 .price(product.getPrice())
                 .category(product.getCategory())
                 .vendor(product.getVendor())
-                .quantity(stockDto.getQuantity())
+                .quantity(stockDto.getQuantityOnHand())
+//                .quantity(stockDto.getQuantity())
                 .build();
+
         return productDto;
     }
 

@@ -88,7 +88,7 @@ public class ProductStockServiceImpl implements ProductStockService {
     public ProductStockDto createStock(ProductStockDto stockDto) {
         ProductStock productStock = new ProductStock();
         productStock.setUpc(stockDto.getUpc());
-        productStock.setQuantityOnHand(productStock.getQuantityOnHand());
+        productStock.setQuantityOnHand(stockDto.getQuantityOnHand());
 
         ProductStock savedStock = productStockRepository.save(productStock);
 
