@@ -13,6 +13,6 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Builder
 public class ProductStockDto {
-    private String upc;
-    private Integer quantityOnHand;
+    public String productId;
+    public Long quantity;
 }

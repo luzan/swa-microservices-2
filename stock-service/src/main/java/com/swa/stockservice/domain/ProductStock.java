@@ -34,13 +34,17 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ProductStock extends BaseEntity implements Serializable {
+public class ProductStock implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String upc;
     private Integer quantityOnHand = 0;
 
     @Builder
-    public ProductStock(Long id, Timestamp createdDate, Timestamp lastModifiedDate, String upc, Integer quantityOnHand) {
-        super(id, createdDate, lastModifiedDate);
+    public ProductStock(Long id, String upc, Integer quantityOnHand) {
+        this.id = id;
         this.upc = upc;
         this.quantityOnHand = quantityOnHand;
     }

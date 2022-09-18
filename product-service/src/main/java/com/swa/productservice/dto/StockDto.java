@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class StockDto {
-
-    public String id;
+//    public String id; // I don't need this id
     public String productId;
     public Long quantity;
 }

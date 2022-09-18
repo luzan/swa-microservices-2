@@ -28,8 +28,8 @@ public class ProductStockServiceImpl implements ProductStockService {
                 .stream()
                 .map(productStock -> {
                     ProductStockDto productStockDto = new ProductStockDto();
-                    productStockDto.setUpc(productStock.getUpc());
-                    productStockDto.setQuantityOnHand(productStock.getQuantityOnHand());
+                    productStockDto.setProductId(productStock.getUpc());
+                    productStockDto.setQuantity(productStock.getQuantityOnHand().longValue());
 
                     //continue implementing
 
@@ -42,8 +42,8 @@ public class ProductStockServiceImpl implements ProductStockService {
 
         return productStockRepository.findByUpc(upc).map(productStock -> {
             ProductStockDto productStockDto = new ProductStockDto();
-            productStockDto.setUpc(productStock.getUpc());
-            productStockDto.setQuantityOnHand(productStock.getQuantityOnHand());
+            productStockDto.setProductId(productStock.getUpc());
+            productStockDto.setQuantity(productStock.getQuantityOnHand().longValue());
 
             return productStockDto;
         }).orElse(null);
@@ -60,9 +60,8 @@ public class ProductStockServiceImpl implements ProductStockService {
         ProductStock productSaved = productStockRepository.save(product);
 
         ProductStockDto productStockDto = new ProductStockDto();
-        productStockDto.setUpc(productSaved.getUpc());
-        productStockDto.setQuantityOnHand(productSaved.getQuantityOnHand());
-
+        productStockDto.setProductId(productSaved.getUpc());
+        productStockDto.setQuantity(productSaved.getQuantityOnHand().longValue());
 
         return productStockDto;
     }
@@ -77,8 +76,8 @@ public class ProductStockServiceImpl implements ProductStockService {
         ProductStock productSaved = productStockRepository.save(product);
 
         ProductStockDto productStockDto = new ProductStockDto();
-        productStockDto.setUpc(productSaved.getUpc());
-        productStockDto.setQuantityOnHand(productSaved.getQuantityOnHand());
+        productStockDto.setProductId(productSaved.getUpc());
+        productStockDto.setQuantity(productSaved.getQuantityOnHand().longValue());
 
 
         return productStockDto;
@@ -87,14 +86,14 @@ public class ProductStockServiceImpl implements ProductStockService {
     @Override
     public ProductStockDto createStock(ProductStockDto stockDto) {
         ProductStock productStock = new ProductStock();
-        productStock.setUpc(stockDto.getUpc());
-        productStock.setQuantityOnHand(productStock.getQuantityOnHand());
+        productStock.setUpc(stockDto.getProductId());
+        productStock.setQuantityOnHand(stockDto.getQuantity().intValue());
 
         ProductStock savedStock = productStockRepository.save(productStock);
 
         ProductStockDto returnedStockDto = new ProductStockDto();
-        returnedStockDto.setUpc(savedStock.getUpc());
-        returnedStockDto.setQuantityOnHand(savedStock.getQuantityOnHand());
+        returnedStockDto.setProductId(savedStock.getUpc());
+        returnedStockDto.setQuantity(savedStock.getQuantityOnHand().longValue());
 
         return returnedStockDto;
     }
