@@ -8,6 +8,6 @@ import java.util.List;
 public interface ProductService {
 
     ProductDto createProduct(ProductDto productDto);
-    List<Product> findAllProduct();
+    List<ProductDto> findAllProduct();
     ProductDto getProductById(String id);
 }

@@ -1,4 +1,4 @@
-package com.example.orderservice.feign;
+package com.example.orderservice.client;
 
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(value = "product-service")
 public interface ProductFeignClient {
 
-    @RequestMapping(value = "products/{id}", method = RequestMethod.GET)
-    ResponseEntity<?> getProductById(@PathVariable Long id);
+    @RequestMapping(value = "stocks/{productId}", method = RequestMethod.GET)
+    ResponseEntity<?> getProductStockById(@PathVariable String id);
 }
