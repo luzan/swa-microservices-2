@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+spec:
+  selector:
+    app: account-app
+  ports:
+    - port: 80
+      nodePort: 30082 # exposing to local, to access this service
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-app
+  template:
+    metadata:
+      labels:
+        app: account-app
+    spec:
+      containers:
+        - name: account-app
+          image: account-service
+#          readinessProbe:
+#            httpGet:
+#              port: 80
+#              path: /actuator/health/readiness
+#          livenessProbe:
+#            httpGet:
+#              port: 80
+#              path: /actuator/health/liveness
+#          lifecycle:
+#            preStop:
+#              exec:
+#                command:
+#                  - sh
+#                  - '-c'
+#                  - sleep 10
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_URL
+              value: k8-swa2-mysql
+            - name: MYSQL_PORT
+              value: "3306"
+          #            set db username and password
+          imagePullPolicy: Never
+#          volumeMounts:
+#            - mountPath: /etc/config
+#              name: application-config
+#
+#      volumes:
+#        - name: application-config
+#          projected:
+#            sources:
+#              - configMap:
+#                  name: application-common-config
+#              - configMap:
+#                  name: account-service-config
+#              - secret:
+#                  name: account-service-secret

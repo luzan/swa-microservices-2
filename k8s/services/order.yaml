@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order-app
+  ports:
+    - port: 80
+      nodePort: 30083 # exposing to local, to access this service
+      targetPort: 8083
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-app
+  template:
+    metadata:
+      labels:
+        app: order-app
+    spec:
+      containers:
+        - name: order-app
+          image: order-service
+          ports:
+            - containerPort: 8083
+          env:
+            - name: MYSQL_URL
+              value: k8-swa2-mysql
+            - name: MYSQL_PORT
+              value: "3306"
+          imagePullPolicy: Never
+#          volumeMounts:
+#            - mountPath: /etc/config
+#              name: application-config
+#
+#      volumes:
+#        - name: application-config
+#          projected:
+#            sources:
+#              - configMap:
+#                  name: application-common-config
+#              - configMap:
+#                  name: order-service-config
+#              - secret:
+#                  name: order-service-secret

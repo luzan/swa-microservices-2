@@ -3,11 +3,12 @@ version: '3.9'
 services:
 
   discovery-server:
+    container_name: discovery-server
     ports:
       - 8761:8761
     restart: always
     build:
-      context: ./discovery-server
+      context: ./development-only/eureka-server
       dockerfile: Dockerfile
     environment:
       DISCOVERY_SERVER: discovery-server
@@ -26,6 +27,7 @@ services:
 
 # 8081-8089 for services
   product-service:
+    container_name: product-service
     ports:
       - 8081:8081
     restart: always
@@ -56,6 +58,7 @@ services:
 #        condition: service_healthy
 
   order-service:
+    container_name: order-service
     ports:
       - 8083:8083
     restart: always
@@ -121,8 +124,6 @@ services:
       - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
-#      MYSQL_USER: user
-#      MYSQL_PASSWORD: user
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 100s
