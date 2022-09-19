@@ -11,9 +11,6 @@ import lombok.*;
 @Setter
 public class BankAccountDto {
 
-    private String firstName;
-    private String lastName;
-    private String email;
     private String routingNumber;
     private String bankAccountNumber;
     private AccountType accountType;

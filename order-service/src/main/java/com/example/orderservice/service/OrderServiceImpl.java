@@ -1,10 +1,11 @@
 package com.example.orderservice.service;
 
+import com.example.commonmodule.dtos.AccountDto;
+import com.example.commonmodule.dtos.ShippingDto;
+import com.example.commonmodule.enums.Status;
 import com.example.orderservice.client.*;
 import com.example.orderservice.dto.*;
 import com.example.orderservice.entities.Order;
-import com.example.orderservice.entities.OrderLine;
-import com.example.orderservice.enums.AccountType;
 import com.example.orderservice.enums.PaymentType;
 import com.example.orderservice.repository.OrderLineRepository;
 import com.example.orderservice.repository.OrderRepository;
@@ -12,41 +13,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
-    OrderLineRepository orderLineRepository;
+    private OrderLineRepository orderLineRepository;
 
     @Autowired
-    ProductFeignClient productFeignClient;
+    private ProductFeignClient productFeignClient;
 
     @Autowired
-    StockFeignClient stockFeignClient;
+    private StockFeignClient stockFeignClient;
 
     @Autowired
-    TransactionFeignClient transactionFeignClient;
+    private TransactionFeignClient transactionFeignClient;
 
     @Autowired
-    BankFeignClient bankFeignClient;
+    private BankFeignClient bankFeignClient;
 
     @Autowired
-    PayPalFeignClient payPalFeignClient;
+    private PayPalFeignClient payPalFeignClient;
 
     @Autowired
-    CreditCardFeignClient creditCardFeignClient;
+    private CreditCardFeignClient creditCardFeignClient;
+
+    @Autowired
+    private ShippingFeignClient shippingFeignClient;
+
+    @Autowired
+    private AccountFeignClient accountFeignClient;
 
     @Override
-    public Order createOrder(Order order) {
-        List<Double> productCost = order.getProductList().stream().map(productDto -> {
+    public OrderDto createOrder(OrderDto orderDto) {
+        List<Double> productCost = orderDto.getProductList().stream().map(productDto -> {
             ResponseEntity<ProductDto> response = productFeignClient.getProductById(productDto.getProductId());
             ProductDto orderedProduct =  response.getBody();
                 if (productDto.getQuantity() > orderedProduct.getQuantity()) {
@@ -60,67 +65,69 @@ public class OrderServiceImpl implements OrderService {
         }).collect(Collectors.toList());
 
         Double cost = calculateTotal(productCost);
-        PaymentType paymentType = order.getPaymentType();
+        PaymentType paymentType = orderDto.getPaymentType();
+
+        ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccountByUserId("123");
+        Order order = Order.builder()
+                .accountId(accountResponse.getBody().getAccountId())
+                .paymentType(orderDto.getPaymentType())
+                .productList(orderDto.getProductList())
+                .build();
+
         Order savedOrder = orderRepository.save(order);
 //        orderLineRepository.saveAll(savedOrder.getProductList());
-        payment(cost, paymentType, savedOrder.getId());
+        payment(cost, orderDto);
 
-        return order;
+        shippedOrder(savedOrder.getId());
+
+        return orderDto;
     }
 
-    private void payment(Double cost, PaymentType paymentType, String orderId) {
+    private void shippedOrder(String orderId) {
+        ShippingDto shippingDto = ShippingDto.builder()
+                .status(Status.SHIPPED)
+                .shippingCode(Math.random())
+                .orderId(orderId)
+                .build();
+
+        shippingFeignClient.createShipping(shippingDto);
+    }
+
+    private void payment(Double cost, OrderDto order) {
+        PaymentType paymentType = order.getPaymentType();
+
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setTransactionCode(Math.random());
-        transactionDto.setPaymentMethod(paymentType.toString());
+        transactionDto.setPaymentMethod(order.getPaymentType().toString());
         transactionDto.setTotal(cost);
-        transactionDto.setOrderId(orderId);
+        transactionDto.setOrderId(order.getId());
 
         if (paymentType == PaymentType.PAYPAL) {
-            PaypalDto paypalDto = new PaypalDto();
-            paypalDto.setFirstName("Simran");
-            paypalDto.setLastName("Sthapit");
-            paypalDto.setEmailAddress("ss@gmail");
-            paypalDto.setBalance(3000.0);
-            paypalDto.setSecureKey("2118");
+            PaypalDto paypalDto = order.getPaypal();
+            paypalDto.setBalance(cost);
             ResponseEntity<Boolean> response = payPalFeignClient.verifyPaypal(paypalDto);
-            if (response.getBody()) {
-                ResponseEntity<TransactionDto> transactionDtoResponse = transactionFeignClient.createTransaction(transactionDto);
-            } else {
+            if (response.getBody() == false) {
                 throw new RuntimeException("Invalid Paypal Account !!!");
             }
         } else if (paymentType == PaymentType.BANK) {
-            BankAccountDto bankAccountDto = new BankAccountDto();
-            bankAccountDto.setFirstName("Supriya");
-            bankAccountDto.setLastName("Ghising");
-            bankAccountDto.setAccountType(AccountType.CHECKING);
-            bankAccountDto.setEmail("supriya.ghising@miu.edu");
-            bankAccountDto.setBankAccountNumber("12345678");
-            bankAccountDto.setRoutingNumber("11111");
+            BankAccountDto bankAccountDto = order.getBankAccount();
             bankAccountDto.setBalance(cost);
-            ResponseEntity<Boolean> response = bankFeignClient.verifyPurchase(bankAccountDto);
-            if (response.getBody()) {
-                ResponseEntity<TransactionDto> transactionDtoResponse = transactionFeignClient.createTransaction(transactionDto);
-            } else {
+            ResponseEntity<Boolean> response = bankFeignClient.verifyPurchase(order.getBankAccount());
+            if (response.getBody() == false) {
                 throw new RuntimeException("Invalid Bank Account !!!");
             }
         } else if (paymentType == PaymentType.CREDIT_CARD) {
-            CreditCardDto creditCardDto = new CreditCardDto();
-            creditCardDto.setFirstName("Anthony");
-            creditCardDto.setLastName("Sander");
-            creditCardDto.setCardLimit(2000.0);
-            creditCardDto.setCcv("4321");
-            creditCardDto.setExpiryDate(LocalDate.of(2024,11,11));
-            creditCardDto.setBalance(0.0);
-            creditCardDto.setCardNumber("123456789");
-            ResponseEntity<Boolean> isCreditCardVerify = creditCardFeignClient.verifyPurchase(creditCardDto);
-            if (isCreditCardVerify.getBody()) {
-                ResponseEntity<TransactionDto> transactionDtoResponse = transactionFeignClient.createTransaction(transactionDto);
-            } else {
+            CreditCardDto creditCardDto = order.getCreditCard();
+            creditCardDto.setBalance(cost);
+            ResponseEntity<Boolean> isCreditCardVerify = creditCardFeignClient.verifyPurchase(order.getCreditCard());
+            if (isCreditCardVerify.getBody() == false) {
                 throw new RuntimeException("Invalid Credit Card !!!");
             }
         } else {
             throw new RuntimeException("Invalid Payment Type !!!");
         }
+
+        ResponseEntity<TransactionDto> transactionDtoResponse = transactionFeignClient.createTransaction(transactionDto);
 
     }
 

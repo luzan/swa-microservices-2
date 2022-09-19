@@ -1,6 +1,7 @@
 package com.example.orderservice.controller;
 
 
+import com.example.orderservice.dto.OrderDto;
 import com.example.orderservice.dto.ProductDto;
 import com.example.orderservice.entities.Order;
 import com.example.orderservice.service.OrderService;
@@ -30,8 +31,8 @@ public class OrderController {
     }
 
     @PostMapping("/create-order")
-    public ResponseEntity<?> createOrder(@RequestBody Order order) {
-        Order createdOrder= orderService.createOrder(order);
+    public ResponseEntity<?> createOrder(@RequestBody OrderDto orderDto) {
+        OrderDto createdOrder= orderService.createOrder(orderDto);
         return new ResponseEntity<>(createdOrder, HttpStatus.OK);
     }
 }
