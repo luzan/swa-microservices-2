@@ -90,12 +90,12 @@ public class OrderServiceImpl implements OrderService {
             }
         } else if (paymentType == PaymentType.BANK) {
             BankAccountDto bankAccountDto = new BankAccountDto();
-            bankAccountDto.setFirstName("Sanjaya");
-            bankAccountDto.setLastName("Koju");
+            bankAccountDto.setFirstName("Supriya");
+            bankAccountDto.setLastName("Ghising");
             bankAccountDto.setAccountType(AccountType.CHECKING);
-            bankAccountDto.setEmail("sanjayakoju@gmail.com");
-            bankAccountDto.setBankAccountNumber("23235235");
-            bankAccountDto.setRoutingNumber("014215");
+            bankAccountDto.setEmail("supriya.ghising@miu.edu");
+            bankAccountDto.setBankAccountNumber("12345678");
+            bankAccountDto.setRoutingNumber("11111");
             bankAccountDto.setBalance(cost);
             ResponseEntity<Boolean> response = bankFeignClient.verifyPurchase(bankAccountDto);
             if (response.getBody()) {
