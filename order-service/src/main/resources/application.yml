@@ -18,14 +18,16 @@ spring:
     hibernate:
       ddl-auto: update
 
-app:
-  jwt:
-    token:
-      secret-key: swa-proj1-jwt-secret
-      expire-seconds: 86400
-
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
+app:
+  jwt:
+    token:
+      secret-key: ${JWT_SECRET_KEY:swa-proj1-jwt-secret}
+      expire-seconds: 86400
+
+

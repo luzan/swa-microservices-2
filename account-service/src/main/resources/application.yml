@@ -22,7 +22,7 @@ spring:
 app:
   jwt:
     token:
-      secret-key: swa-proj1-jwt-secret
+      secret-key: ${JWT_SECRET_KEY:swa-proj1-jwt-secret}
       expire-seconds: 86400
 
 management:

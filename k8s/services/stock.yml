@@ -1,33 +1,33 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: account-service
+  name: stock-service
 spec:
   selector:
-    app: account-app
+    app: stock-app
   ports:
     - port: 80
-      nodePort: 30082 # exposing to local, to access this service
-      targetPort: 8082
+      nodePort: 30087 # exposing to local, to access this service
+      targetPort: 8087
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-service
+  name: stock-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: account-app
+      app: stock-app
   template:
     metadata:
       labels:
-        app: account-app
+        app: stock-app
     spec:
       containers:
-        - name: account-app
-          image: proj2_account-service
+        - name: stock-app
+          image: proj2_stock-service
 #          readinessProbe:
 #            httpGet:
 #              port: 80
@@ -44,17 +44,17 @@ spec:
 #                  - '-c'
 #                  - sleep 10
           ports:
-            - containerPort: 8082
+            - containerPort: 8087
           env:
             - name: MYSQL_URL
               valueFrom:
                 configMapKeyRef:
                   name: database-configs
-                  key: account_mysqlURL
+                  key: stock_mysqlURL
 
             - name: MYSQL_DB_NAME
               valueFrom:
                 configMapKeyRef:
                   name: database-configs
-                  key: account_dbName
+                  key: stock_dbName
           imagePullPolicy: Never

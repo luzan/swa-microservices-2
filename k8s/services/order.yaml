@@ -27,26 +27,19 @@ spec:
     spec:
       containers:
         - name: order-app
-          image: order-service
+          image: proj2_order-service
           ports:
             - containerPort: 8083
           env:
             - name: MYSQL_URL
-              value: k8-swa2-mysql
-            - name: MYSQL_PORT
-              value: "3306"
+              valueFrom:
+                configMapKeyRef:
+                  name: database-configs
+                  key: order_mysqlURL
+
+            - name: MYSQL_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: database-configs
+                  key: order_dbName
           imagePullPolicy: Never
-#          volumeMounts:
-#            - mountPath: /etc/config
-#              name: application-config
-#
-#      volumes:
-#        - name: application-config
-#          projected:
-#            sources:
-#              - configMap:
-#                  name: application-common-config
-#              - configMap:
-#                  name: order-service-config
-#              - secret:
-#                  name: order-service-secret

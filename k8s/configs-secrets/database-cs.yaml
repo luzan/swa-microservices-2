@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: database-configs
 data:
-  product_mysqlHost: k8-swa2-mysql
+  product_mysqlURL: k8-swa2-mysql
   product_dbName: product-db
