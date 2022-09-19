@@ -10,10 +10,10 @@ __Development:__
 
 2. Running the application using docker
    - If cloned first time, In the root directory run `mvn clean install` or use IDE, maven -> lifecycle -> install (to create jar for all services) 
-   - Then, In terminal type: `docker compose up`. In root directory. (will run mysql, and other services)
+   - Then, In terminal type: `docker compose up`. (this will run mysql, and other services)
 
 > Running mysql using docker compose here, will create multiple schemas
-> schemas to create are defined in folder - `zmysql/init/`, 01-schemas.sql file and specified in docker-compose yml
+> these are defined in folder - `zmysql/init/`, 01-schemas.sql file and specified in docker-compose yml
 
 __Deployment:__
 - __Using Kubernetes:__ Create kubernetes config files and use it to deploy each services images
@@ -21,7 +21,7 @@ __Deployment:__
 
   
 
-## # How to create this project Or continue creating new modules/services ?  
+## # How to create this project, and how to add new modules/services ?  
 __Steps: Creating multi-module project__  
 1. Create new project "swa-2", and select buildSystem maven.
 2. Then either Create new services or Add existing ones

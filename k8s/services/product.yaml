@@ -1,0 +1,62 @@
+# Service: It makes Pods accessible to other pods or outside cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  selector:
+    app: product-app
+  ports:
+    - port: 80
+      nodePort: 30081 # exposing to local, to access this service
+      targetPort: 8081
+  type: LoadBalancer
+---
+# Deployment: How to run app in the cluster, Pods spec
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-app
+  template:
+    metadata:
+      labels:
+        app: product-app
+    spec:
+      containers:
+        - name: product-app
+          image: product-service
+          ports:
+            - containerPort: 8081
+          env:
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: database-configs
+                  key: product_mysqlHost
+
+            - name: MYSQL_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: database-configs
+                  key: product_dbName
+
+          imagePullPolicy: Never
+#          volumeMounts:
+#            - mountPath: /etc/config
+#              name: application-config
+#
+#      volumes:
+#        - name: application-config
+#          projected:
+#            sources:
+#              - configMap:
+#                  name: application-common-config
+#              - configMap:
+#                  name: product-service-config
+#              - secret:
+#                  name: product-service-secret

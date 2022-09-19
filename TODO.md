@@ -18,6 +18,25 @@
     - [ ] Bank Transfer Service
 
 - [X] Shipping Service
+- [X] Transaction Service
+
+| Service               | Port |
+|-----------------------|------|
+| product-service       | 8081 |
+| account-service       | 8082 |
+| order-service         | 8083 |
+| --------------        | ---- |
+| bankaccount-service   | 8084 |
+| credit-service        | 8085 |
+| paypal-service        | 8086 |
+| --------------        | ---- |
+| stock-service         | 8087 |
+| shipping-service      | 8088 |
+| transaction-service   | 8089 |
+| --------------        | ---- |
+| auth-service          | 8070 |
+| --------------        | ---- |
+| _eureka-server (DEV)_ | 8761 |
 
 
 ### TODO: Basic functionality for each Services and it's Database

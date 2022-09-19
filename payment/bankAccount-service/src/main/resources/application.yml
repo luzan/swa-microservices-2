@@ -1,0 +1,31 @@
+server:
+  port: 8084
+
+
+spring:
+  application:
+    name: bank-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_URL:localhost:3306}/${MYSQL_DB_NAME:bank-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+    hikari:
+      initialization-fail-timeout: 0
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+app:
+  jwt:
+    token:
+      secret-key: swa-proj1-jwt-secret
+      expire-seconds: 86400
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
