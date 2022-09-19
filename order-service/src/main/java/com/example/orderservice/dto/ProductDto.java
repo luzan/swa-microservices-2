@@ -10,5 +10,6 @@ public class ProductDto {
     private String id;
     private String productName;
     private Double price;
-    private Long quantity;
+    private String vendor;
+    private Integer quantity;
 }

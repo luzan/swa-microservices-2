@@ -18,6 +18,7 @@
     - [ ] Bank Transfer Service
 
 - [X] Shipping Service
+- [X] Transaction Service
 
 
 ### TODO: Basic functionality for each Services and it's Database

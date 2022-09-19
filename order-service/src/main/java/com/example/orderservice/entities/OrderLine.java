@@ -21,7 +21,7 @@ public class OrderLine {
     private String productId;
     private String productName;
     private Double price;
-    private Long quantity;
-    @ManyToOne(cascade = CascadeType.ALL)
+    private Integer quantity;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Order order;
 }

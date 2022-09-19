@@ -1,5 +1,6 @@
 package com.example.orderservice.entities;
 
+import com.example.orderservice.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class Order {
     private String id;
     @Column
     private String accountId;
+    @Enumerated
+    private PaymentType paymentType;
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderLine> productList;
 }

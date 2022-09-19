@@ -63,7 +63,9 @@ public class ProductServiceImpl implements ProductService {
                   productDto.setCategory(product.getCategory());
                   ResponseEntity<?> response = stockFeignClient.getStockByProductId(product.getId());
                   StockDto stockDto = (StockDto) response.getBody();
-                  productDto.setQuantity(stockDto.getQuantity());
+                  if (stockDto != null) {
+                      productDto.setQuantity(stockDto.getQuantity());
+                  }
                   return productDto;
               }).collect(Collectors.toList());
     }

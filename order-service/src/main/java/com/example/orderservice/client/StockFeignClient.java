@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "STOCK-SERVICE")
 public interface StockFeignClient {
 
-    @GetMapping("/stocks/{productId}")
-    public ResponseEntity<?> getStockByProductId(@PathVariable String productId);
+    @GetMapping("/stock/product/{productId}")
+    public ResponseEntity<StockDto> getStockByProductId(@PathVariable String productId);
 
-    @PutMapping("/stocks/update")
-    public ResponseEntity<?> updateStock(@RequestBody StockDto stockDto);
+    @GetMapping("/stock/product/{id}/deallocate/{qty}")
+    public ResponseEntity<?> updateStock(@PathVariable String id, @PathVariable Integer qty);
 }
