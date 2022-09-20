@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AccountRepository extends JpaRepository<Account, String> {
 
-    public Account findAccountByUserId(String userId);
+    public Account findAccountByUserId(Long userId);
 }

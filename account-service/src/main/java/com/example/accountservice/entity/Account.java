@@ -19,7 +19,7 @@ public class Account {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String accountId;
-    private String userId;
+    private Long userId;
     private String firstName;
     private String lastName;
     @OneToOne(cascade = CascadeType.PERSIST)

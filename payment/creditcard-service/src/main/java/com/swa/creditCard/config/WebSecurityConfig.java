@@ -31,7 +31,7 @@ public class WebSecurityConfig {
         return http.csrf().disable().httpBasic().and()
                 .authorizeRequests(ar -> ar
 //                       TODO, Permitting creditcards endpoint, just for development
-                        .antMatchers("/creditcards/**").permitAll()
+                        .antMatchers("/creditcards/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh

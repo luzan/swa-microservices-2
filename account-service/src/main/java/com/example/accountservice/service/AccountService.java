@@ -6,5 +6,5 @@ import com.example.commonmodule.dtos.AccountDto;
 public interface AccountService {
     public AccountDto saveAccount(Account account);
 
-    public AccountDto getAccountByUserId(String userId);
+    public AccountDto getAccountByUserId(Long userId);
 }

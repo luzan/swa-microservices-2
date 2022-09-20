@@ -31,7 +31,7 @@ public class WebSecurityConfig {
         return http.csrf().disable().httpBasic().and()
                 .authorizeRequests(ar -> ar
 //                       TODO, Permitting stock endpoint, just for development
-                        .antMatchers("/stock/**").permitAll()
+                        .antMatchers("/stock/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh

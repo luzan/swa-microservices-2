@@ -31,7 +31,7 @@ public class WebSecurityConfig {
         return http.csrf().disable().httpBasic().and()
                 .authorizeRequests(ar -> ar
 //                       TODO, Permitting accounts endpoint, just for development
-                        .antMatchers("/accounts/**").permitAll()
+                        .antMatchers("/accounts/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh

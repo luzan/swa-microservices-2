@@ -31,7 +31,7 @@ public class WebSecurityConfig {
         return http.csrf().disable().httpBasic().and()
                 .authorizeRequests(ar -> ar
 //                       TODO, Permitting paypals endpoint, just for development
-                        .antMatchers("/paypals/**").permitAll()
+                        .antMatchers("/paypals/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh

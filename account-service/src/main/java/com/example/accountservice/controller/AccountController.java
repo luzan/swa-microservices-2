@@ -21,7 +21,7 @@ public class AccountController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<AccountDto> getAccountById(@PathVariable String id) {
+    public ResponseEntity<AccountDto> getAccountById(@PathVariable Long id) {
         return new ResponseEntity<>(accountService.getAccountByUserId(id), HttpStatus.OK);
     }
 }
