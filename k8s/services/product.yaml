@@ -5,7 +5,7 @@ metadata:
   name: product-service
 spec:
   selector:
-    app: product-app
+    app: product-service
   ports:
     - port: 80
       nodePort: 30081 # exposing to local, to access this service
@@ -21,18 +21,20 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: product-app
+      app: product-service
   template:
     metadata:
       labels:
-        app: product-app
+        app: product-service
     spec:
       containers:
-        - name: product-app
+        - name: product-service
           image: proj2_product-service
           ports:
             - containerPort: 8081
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
             - name: MYSQL_URL
               valueFrom:
                 configMapKeyRef:

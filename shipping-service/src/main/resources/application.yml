@@ -7,7 +7,7 @@ spring:
     name: shipping-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_URL:localhost:3306}/${MYSQL_DB_NAME:shipping-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB_NAME:shipping-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: ${MYSQL_USERNAME:root}
     password: ${MYSQL_PASSWORD:root}
     hikari:
@@ -17,6 +17,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
+
 
 app:
   jwt:

@@ -28,24 +28,11 @@ spec:
       containers:
         - name: auth-app
           image: proj2_auth-service
-          #          readinessProbe:
-          #            httpGet:
-          #              port: 80
-          #              path: /actuator/health/readiness
-          #          livenessProbe:
-          #            httpGet:
-          #              port: 80
-          #              path: /actuator/health/liveness
-          #          lifecycle:
-          #            preStop:
-          #              exec:
-          #                command:
-          #                  - sh
-          #                  - '-c'
-          #                  - sleep 10
           ports:
             - containerPort: 8070
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
             - name: MYSQL_URL
               valueFrom:
                 configMapKeyRef:

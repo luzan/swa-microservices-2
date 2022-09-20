@@ -4,7 +4,7 @@ metadata:
   name: order-service
 spec:
   selector:
-    app: order-app
+    app: order-service
   ports:
     - port: 80
       nodePort: 30083 # exposing to local, to access this service
@@ -19,18 +19,20 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order-app
+      app: order-service
   template:
     metadata:
       labels:
-        app: order-app
+        app: order-service
     spec:
       containers:
-        - name: order-app
+        - name: order-service
           image: proj2_order-service
           ports:
             - containerPort: 8083
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
             - name: MYSQL_URL
               valueFrom:
                 configMapKeyRef:
