@@ -82,7 +82,7 @@ public class JwtTokenProvider {
         String username = ((String) body.get("username"));
         ObjectMapper objectMapper = new ObjectMapper();
         Set<String> stringRoles = objectMapper.readValue(body.get("roles").toString(), Set.class);
-        Set<UserRole> userRolesSet = AppServiceUtils.convertStringRolesSetToEnumSet(stringRoles);
+        Set<UserRole> userRolesSet = AppSecurityUtils.convertStringRolesSetToEnumSet(stringRoles);
         CustomUserDetails customUserDetails = new CustomUserDetails(userId, username, null, userRolesSet);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

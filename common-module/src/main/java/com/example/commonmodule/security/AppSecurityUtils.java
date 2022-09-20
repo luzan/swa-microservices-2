@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class AppServiceUtils {
+public class AppSecurityUtils {
 
     public static Set<UserRole> convertStringRolesSetToEnumSet(Set<String> roles) {
         Set<UserRole> userRoleSet = new HashSet<>();

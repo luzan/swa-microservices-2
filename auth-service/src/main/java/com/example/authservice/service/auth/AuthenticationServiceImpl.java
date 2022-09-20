@@ -50,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = new User();
         user.setUsername(registerUserRequestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserRequestDTO.getPassword()));
-        user.setRoles(Set.of(UserRole.USER));
+        user.setRoles(Set.of(UserRole.ROLE_USER));
         User returnedUser = userRepository.save(user);
         return mapUserToUserDTO(returnedUser);
     }

@@ -3,16 +3,15 @@ package com.example.commonmodule.security;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JwtTokenFilter extends GenericFilterBean {
+public class JwtTokenFilter extends OncePerRequestFilter {
 
     private JwtTokenProvider jwtTokenProvider;
 
@@ -21,10 +20,10 @@ public class JwtTokenFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String token = jwtTokenProvider.getTokenFromRequestHeader((HttpServletRequest) request);
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token, (HttpServletRequest) request)) {
-            Authentication auth = jwtTokenProvider.getAuthenticationFromTokenString(token, (HttpServletRequest) request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        String token = jwtTokenProvider.getTokenFromRequestHeader(request);
+        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token, request)) {
+            Authentication auth = jwtTokenProvider.getAuthenticationFromTokenString(token, request);
             if (auth != null) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
