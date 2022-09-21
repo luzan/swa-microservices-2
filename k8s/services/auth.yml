@@ -7,9 +7,9 @@ spec:
     app: auth-app
   ports:
     - port: 80
-      nodePort: 30070 # exposing to local, to access this service
+#      nodePort: 30070 # exposing to local, to access this service
       targetPort: 8070
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,4 +44,19 @@ spec:
                 configMapKeyRef:
                   name: database-configs
                   key: auth_dbName
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: jwt-secret-key
+            - name: MYSQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: password
           imagePullPolicy: Never

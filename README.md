@@ -2,6 +2,17 @@
 ![Mind Map](docs/SWA%20Microservice.jpg)
 
 ## # How to run ? _Options:_  
+
+```cmd
+mvn clean install -DskipTests
+
+# If minkiube, also run -> minikube docker-env
+docker compose build
+
+
+```
+
+
 __Development:__
 1. Running Single Service at a time:
    - __If Using IDE (Using IntelliJ)__: Run each services by clicking their "run" icon

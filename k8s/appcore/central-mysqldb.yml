@@ -7,7 +7,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 256Mi
+      storage: 50Mi
 ---
 apiVersion: v1
 kind: Service
@@ -41,9 +41,11 @@ spec:
           image: mysql:latest
           imagePullPolicy: IfNotPresent
           env:
-            # Use secret in real usage
             - name: MYSQL_ROOT_PASSWORD
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: password
           ports:
             - containerPort: 3306
           volumeMounts:

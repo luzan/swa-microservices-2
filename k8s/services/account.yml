@@ -44,4 +44,19 @@ spec:
                 configMapKeyRef:
                   name: database-configs
                   key: account_dbName
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: jwt-secret-key
+            - name: MYSQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: password
           imagePullPolicy: Never
