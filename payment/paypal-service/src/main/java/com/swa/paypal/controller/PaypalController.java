@@ -22,8 +22,8 @@ public class PaypalController {
 
 
     @PutMapping("verify-purchase")
-    public ResponseEntity<?> verifyPurchase(@RequestBody PaypalDto paypalDto){
-        return new ResponseEntity<>(paypalService.verifyPurchase(paypalDto), HttpStatus.OK);
+    public ResponseEntity<?> checkPaypal(@RequestBody PaypalDto paypalDto){
+        return new ResponseEntity<>(paypalService.checkPaypal(paypalDto), HttpStatus.OK);
     }
 
 

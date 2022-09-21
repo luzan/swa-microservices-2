@@ -5,5 +5,5 @@ import com.swa.paypal.dto.PaypalDto;
 public interface PaypalService {
     PaypalDto savePaypal(PaypalDto paypalDto);
 
-    boolean verifyPurchase(PaypalDto paypalDto);
+    boolean checkPaypal(PaypalDto paypalDto);
 }
