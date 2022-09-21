@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-configs
+data:
+  auth_mysqlURL: k8-swa2-mysql
+  auth_dbName: auth-db
+
+  product_mysqlURL: k8-swa2-mysql
+  product_dbName: product-db
+  account_mysqlURL: k8-swa2-mysql
+  account_dbName: account-db
+  order_mysqlURL: k8-swa2-mysql
+  order_dbName: order-db
+
+  bankaccount_mysqlURL: k8-swa2-mysql
+  bankaccount_dbName: bankaccount-db
+  credit_mysqlURL: k8-swa2-mysql
+  credit_dbName: credit-db
+  paypal_mysqlURL: k8-swa2-mysql
+  paypal_dbName: paypal-db
+
+  stock_mysqlURL: k8-swa2-mysql
+  stock_dbName: stock-db
+  shipping_mysqlURL: k8-swa2-mysql
+  shipping_dbName: shipping-db
+  transaction_mysqlURL: k8-swa2-mysql
+  transaction_dbName: transaction-db

@@ -5,5 +5,5 @@ import com.example.orderservice.entities.Order;
 
 public interface OrderService {
 
-    Order createOrder(Order order);
+    OrderDto createOrder(OrderDto orderDto);
 }

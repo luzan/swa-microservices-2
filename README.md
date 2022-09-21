@@ -12,6 +12,11 @@ __Development:__
    - If cloned first time, In the root directory run `mvn clean install` or use IDE, maven -> lifecycle -> install (to create jar for all services) 
    - Then, In terminal type: `docker compose up`. (this will run mysql, and other services)
 
+    ```cmd 
+   mvn clean install
+   docker compose up
+    ```
+
 > Running mysql using docker compose here, will create multiple schemas
 > these are defined in folder - `zmysql/init/`, 01-schemas.sql file and specified in docker-compose yml
 

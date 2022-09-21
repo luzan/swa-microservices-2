@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "BANK-SERVICE")
+@FeignClient(name = "BANK-SERVICE", url = "${app.url.bank-service}")
 public interface BankFeignClient {
 
     @PutMapping("/bankaccounts/verify-purchase")

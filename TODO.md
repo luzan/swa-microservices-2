@@ -20,6 +20,11 @@
 - [X] Shipping Service
 - [X] Transaction Service
 
+> __8080__: Reserved (Don't Use)
+> __Greater than 8081__: Application micro-services
+> __8070-8079__: Application supporting-services
+> __LESS than 8070__: Others
+
 | Service               | Port |
 |-----------------------|------|
 | product-service       | 8081 |

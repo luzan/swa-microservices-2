@@ -9,10 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaypalDto {
-    private String firstName;
-    private String lastName;
     private String emailAddress;
     private String secureKey;
     private Double balance;

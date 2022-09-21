@@ -7,9 +7,9 @@ spring:
     name: paypal-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_URL:localhost:3306}/${MYSQL_DB_NAME:paypal-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB_NAME:paypal-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:root}
+    password: ${MYSQL_PASSWORD:Root#1234}
     hikari:
       initialization-fail-timeout: 0
   jpa:
@@ -18,10 +18,16 @@ spring:
     hibernate:
       ddl-auto: update
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
+
+
 app:
   jwt:
     token:
-      secret-key: swa-proj1-jwt-secret
+      secret-key: ${JWT_SECRET_KEY:swa-proj1-jwt-secret}
       expire-seconds: 86400
 
 management:

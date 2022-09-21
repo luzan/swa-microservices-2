@@ -7,9 +7,9 @@ spring:
     name: order-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_URL:localhost:3306}/${MYSQL_DB_NAME:order-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://${MYSQL_URL:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB_NAME:order-db}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:root}
+    password: ${MYSQL_PASSWORD:Root#1234}
     hikari:
       initialization-fail-timeout: 0
   jpa:
@@ -18,14 +18,33 @@ spring:
     hibernate:
       ddl-auto: update
 
-app:
-  jwt:
-    token:
-      secret-key: swa-proj1-jwt-secret
-      expire-seconds: 86400
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
+
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
+app:
+  jwt:
+    token:
+      secret-key: ${JWT_SECRET_KEY:swa-proj1-jwt-secret}
+      expire-seconds: 86400
+  url:
+    product-service: ${PRODUCT_SERVICE_URL:localhost:8081}
+    account-service: ${ACCOUNT_SERVICE_URL:localhost:8082}
+    bank-service: ${BANK_SERVICE_URL:localhost:8084}
+    credit-service: ${CREDIT_SERVICE_URL:localhost:8085}
+    paypal-service: ${PAYPAL_SERVICE_URL:localhost:8086}
+    stock-service: ${STOCK_SERVICE_URL:localhost:8087}
+    shipping-service: ${SHIPPING_SERVICE_URL:localhost:8088}
+    transaction-service: ${TRANSACTION_SERVICE_URL:localhost:8089}
+
+
+
+

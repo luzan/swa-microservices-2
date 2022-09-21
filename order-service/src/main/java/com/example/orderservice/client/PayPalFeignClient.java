@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "PAYPAL-SERVICE")
+@FeignClient(name = "PAYPAL-SERVICE", url = "${app.url.paypal-service}")
 public interface PayPalFeignClient {
 
     @PutMapping("/paypals/verify-purchase")

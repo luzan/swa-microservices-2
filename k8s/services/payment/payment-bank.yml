@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-service
+spec:
+  selector:
+    app: bank-app
+  ports:
+    - port: 80
+      nodePort: 30082 # exposing to local, to access this service
+      targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-app
+  template:
+    metadata:
+      labels:
+        app: bank-app
+    spec:
+      containers:
+        - name: bank-app
+          image: proj2_bank-service
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: MYSQL_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: database-configs
+                  key: bank_mysqlURL
+
+            - name: MYSQL_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: database-configs
+                  key: bank_dbName
+          imagePullPolicy: Never

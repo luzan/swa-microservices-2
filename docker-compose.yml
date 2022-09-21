@@ -2,8 +2,9 @@ version: '3.9'
 
 services:
 
-  discovery-server:
-    container_name: discovery-server
+  eureka-server:
+    container_name: proj2_eureka-container
+    image: proj2_eureka-server
     ports:
       - 8761:8761
     restart: always
@@ -11,11 +12,7 @@ services:
       context: ./development-only/eureka-server
       dockerfile: Dockerfile
     environment:
-      DISCOVERY_SERVER: discovery-server
-      MYSQL_URL: swa2-mysql
-    depends_on:
-      swa2-mysql:
-        condition: service_healthy
+      EUREKA_HOSTNAME: eureka-server
     healthcheck:
       test: "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1"
       interval: 20s
@@ -23,11 +20,10 @@ services:
       retries: 5
       start_period: 40s
 
-# 8080, for now reserved for main api gateway
-
-# 8081-8089 for services
+  # ================================
   product-service:
-    container_name: product-service
+    container_name: proj2_product-container
+    image: proj2_product-service
     ports:
       - 8081:8081
     restart: always
@@ -36,29 +32,36 @@ services:
       dockerfile: Dockerfile
     environment:
       MYSQL_URL: swa2-mysql
-      EUREKA_URL: discovery-server
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
     depends_on:
-      discovery-server:
-        condition: service_healthy
       swa2-mysql:
         condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
-
-#  account-service:
-#    ports:
-#      - 8082:8082
-#    restart: always
-#    build:
-#      context: ./account-service
-#      dockerfile: Dockerfile
-#    environment:
-#      MYSQL_URL: swa2-mysql
-#    depends_on:
-#      swa2-mysql:
-#        condition: service_healthy
+  account-service:
+    container_name: proj2_account-container
+    image: proj2_account-service
+    ports:
+      - 8082:8082
+    restart: always
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   order-service:
-    container_name: order-service
+    container_name: proj2_order-container
+    image: proj2_order-service
     ports:
       - 8083:8083
     restart: always
@@ -67,71 +70,164 @@ services:
       dockerfile: Dockerfile
     environment:
       MYSQL_URL: swa2-mysql
-      EUREKA_URL: discovery-server
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
     depends_on:
-      discovery-server:
+      swa2-mysql:
         condition: service_healthy
-      product-service:
+      eureka-server:
         condition: service_healthy
+
+  # =====================
+  bankaccount-service:
+    container_name: proj2_bankaccount-container
+    image: proj2_bankaccount-service
+    ports:
+      - 8084:8084
+    restart: always
+    build:
+      context: ./payment/bankAccount-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  credit-service:
+    container_name: proj2_credit-container
+    image: proj2_credit-service
+    ports:
+      - 8085:8085
+    restart: always
+    build:
+      context: ./payment/creditcard-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  paypal-service:
+    container_name: proj2_paypal-container
+    image: proj2_paypal-service
+    ports:
+      - 8086:8086
+    restart: always
+    build:
+      context: ./payment/paypal-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  # =================================
+  stock-service:
+    container_name: proj2_stock-container
+    image: proj2_stock-service
+    ports:
+      - 8087:8087
+    restart: always
+    build:
+      context: ./stock-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  shipping-service:
+    container_name: proj2_shipping-container
+    image: proj2_shipping-service
+    ports:
+      - 8088:8088
+    restart: always
+    build:
+      context: ./shipping-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  transaction-service:
+    container_name: proj2_transaction-container
+    image: proj2_transaction-service
+    ports:
+      - 8089:8089
+    restart: always
+    build:
+      context: ./transaction-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
+      swa2-mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  # ===========================
+  auth-service:
+    container_name: proj2_auth-container
+    image: proj2_auth-service
+    ports:
+      - 8070:8070
+    restart: always
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_URL: swa2-mysql
+      MYSQL_PORT: 3307
+      EUREKA_HOSTNAME: eureka-server
+    depends_on:
       swa2-mysql:
         condition: service_healthy
 
-#  shipping-service:
-#    ports:
-#      - 8084:8084
-#    restart: always
-#    build:
-#      context: ./shipping-service
-#      dockerfile: Dockerfile
-#    environment:
-#      MYSQL_URL: swa2-mysql
-#    depends_on:
-#      swa2-mysql:
-#        condition: service_healthy
-
-# 8090 (for payment gateway) 8091, 8092, 8093 for payment services
-#  creditcard-service:
-#    ports:
-#      - 8091:8091
-#    restart: always
-#    build:
-#      context: ./payment/creditcard-service
-#      dockerfile: Dockerfile
-#    environment:
-#      MYSQL_URL: swa2-mysql
-#    depends_on:
-#      swa2-mysql:
-#        condition: service_healthy
-
-# Auth Service
-#  auth-service:
-#    ports:
-#      - 8070:8070
-#    restart: always
-#    build:
-#      context: ./auth-service
-#      dockerfile: Dockerfile
-#    environment:
-#      MYSQL_URL: swa2-mysql
-#    depends_on:
-#      swa2-mysql:
-#        condition: service_healthy
-
-# MYSQL Database, with multiple schemas for all services
+  #  # ================================
   swa2-mysql:
+#    container_name: swa2-mysql-container
     image: mysql:latest
     ports:
-      - 3307:3306
+      - 3307:3307
     environment:
       MYSQL_ROOT_PASSWORD: root
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 100s
+      timeout: 50s
       retries: 3
     restart: on-failure
     volumes:
       - swa2_mysql:/var/lib/mysql
-      - ./zmysql/init:/docker-entrypoint-initdb.d
+#      - ./zmysql/init:/docker-entrypoint-initdb.d
 
 volumes:
   swa2_mysql:

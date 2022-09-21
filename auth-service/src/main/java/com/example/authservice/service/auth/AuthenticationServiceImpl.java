@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -26,6 +27,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AuthResponseDTO loginUser(LoginRequestDTO loginRequest) {
@@ -46,17 +49,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UserDTO createUser(RegisterUserRequestDTO registerUserRequestDTO) {
         User user = new User();
         user.setUsername(registerUserRequestDTO.getEmail());
-        user.setPassword(registerUserRequestDTO.getPassword());
-        user.setRoles(Set.of(UserRole.USER));
+        user.setPassword(passwordEncoder.encode(registerUserRequestDTO.getPassword()));
+        user.setRoles(Set.of(UserRole.ROLE_USER));
         User returnedUser = userRepository.save(user);
-        return mapUserToUserDTO(user);
+        return mapUserToUserDTO(returnedUser);
     }
 
 
     private UserDTO mapUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
-        userDTO.setEmail(userDTO.getEmail());
+        userDTO.setEmail(user.getUsername());
         return userDTO;
     }
 
