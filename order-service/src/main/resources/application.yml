@@ -18,10 +18,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-  cloud:
-    kubernetes:
-      enabled: false
-
 eureka:
   client:
     service-url:
@@ -39,12 +35,15 @@ app:
     token:
       secret-key: ${JWT_SECRET_KEY:swa-proj1-jwt-secret}
       expire-seconds: 86400
-#  url:
-#    product-service: ${PRODUCT_SERVICE_URL:localhost:8081}
-
-#    product-service: localhost:8081
-#product:
-#  url: loc8085
+  url:
+    product-service: ${PRODUCT_SERVICE_URL:localhost:8081}
+    account-service: ${ACCOUNT_SERVICE_URL:localhost:8082}
+    bank-service: ${BANK_SERVICE_URL:localhost:8084}
+    credit-service: ${CREDIT_SERVICE_URL:localhost:8085}
+    paypal-service: ${PAYPAL_SERVICE_URL:localhost:8086}
+    stock-service: ${STOCK_SERVICE_URL:localhost:8087}
+    shipping-service: ${SHIPPING_SERVICE_URL:localhost:8088}
+    transaction-service: ${TRANSACTION_SERVICE_URL:localhost:8089}
 
 
 

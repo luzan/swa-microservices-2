@@ -10,7 +10,7 @@ spec:
     - port: 80
       nodePort: 30081 # exposing to local, to access this service
       targetPort: 8081
-  type: LoadBalancer
+  type: NodePort
 ---
 # Deployment: How to run app in the cluster, Pods spec
 apiVersion: apps/v1
@@ -35,6 +35,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
+            - name: STOCK_SERVICE_URL
+              value: stock-service
             - name: MYSQL_URL
               valueFrom:
                 configMapKeyRef:

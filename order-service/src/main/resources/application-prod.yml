@@ -1,16 +1,3 @@
-spring:
-  cloud:
-    kubernetes:
-      enabled: true
-      reload:
-        enabled: true
-      discovery:
-        all-namespaces: true
-#      loadbalancer:
-#        mode: SERVICE
-
-    discovery:
-      enabled: true
 
 eureka:
   client:

@@ -9,7 +9,7 @@ spec:
     - port: 80
       nodePort: 30083 # exposing to local, to access this service
       targetPort: 8083
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -33,6 +33,22 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
+            - name: PRODUCT_SERVICE_URL
+              value: product-service
+            - name: ACCOUNT_SERVICE_URL
+              value: account-service
+            - name: BANK_SERVICE_URL
+              value: bank-service
+            - name: CREDIT_SERVICE_URL
+              value: credit-service
+            - name: PAYPAL_SERVICE_URL
+              value: paypal-service
+            - name: STOCK_SERVICE_URL
+              value: stock-service
+            - name: SHIPPING_SERVICE_URL
+              value: shipping-service
+            - name: TRANSACTION_SERVICE_URL
+              value: transaction-service
             - name: MYSQL_URL
               valueFrom:
                 configMapKeyRef:

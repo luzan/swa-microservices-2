@@ -9,7 +9,7 @@ spec:
     - port: 80
       nodePort: 30087 # exposing to local, to access this service
       targetPort: 8087
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment

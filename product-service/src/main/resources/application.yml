@@ -28,6 +28,9 @@ app:
     token:
       secret-key: ${JWT_SECRET_KEY:swa-proj1-jwt-secret}
       expire-seconds: 86400
+  url:
+    stock-service: ${STOCK_SERVICE_URL:localhost:8087}
+
 
 management:
   endpoints:

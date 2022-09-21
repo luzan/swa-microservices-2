@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "ACCOUNT-SERVICE")
+@FeignClient(name = "ACCOUNT-SERVICE", url = "${app.url.account-service}")
 public interface AccountFeignClient {
 
     @GetMapping("/accounts/user/{id}")
