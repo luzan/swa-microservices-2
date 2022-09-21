@@ -3,6 +3,7 @@ package com.example.orderservice.service;
 import com.example.commonmodule.dtos.AccountDto;
 import com.example.commonmodule.dtos.ShippingDto;
 import com.example.commonmodule.enums.Status;
+import com.example.commonmodule.security.AppSecurityUtils;
 import com.example.orderservice.client.*;
 import com.example.orderservice.dto.*;
 import com.example.orderservice.entities.Order;
@@ -53,21 +54,21 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(OrderDto orderDto) {
         List<Double> productCost = orderDto.getProductList().stream().map(productDto -> {
             ResponseEntity<ProductDto> response = productFeignClient.getProductById(productDto.getProductId());
-            ProductDto orderedProduct =  response.getBody();
-                if (productDto.getQuantity() > orderedProduct.getQuantity()) {
-                    throw new RuntimeException("Product "+ productDto.getProductName() + " out of stock!!!");
-                } else {
-                    StockDto stockDto = stockFeignClient.getStockByProductId(productDto.getProductId()).getBody();
-                    stockDto.setQuantity(Math.abs(orderedProduct.getQuantity() - productDto.getQuantity()));
-                    stockFeignClient.updateStock(productDto.getProductId(), productDto.getQuantity());
-                }
-                return productDto.getPrice() * productDto.getQuantity();
+            ProductDto orderedProduct = response.getBody();
+            if (productDto.getQuantity() > orderedProduct.getQuantity()) {
+                throw new RuntimeException("Product " + productDto.getProductName() + " out of stock!!!");
+            } else {
+                StockDto stockDto = stockFeignClient.getStockByProductId(productDto.getProductId()).getBody();
+                stockDto.setQuantity(Math.abs(orderedProduct.getQuantity() - productDto.getQuantity()));
+                stockFeignClient.updateStock(productDto.getProductId(), productDto.getQuantity());
+            }
+            return productDto.getPrice() * productDto.getQuantity();
         }).collect(Collectors.toList());
 
         Double cost = calculateTotal(productCost);
         PaymentType paymentType = orderDto.getPaymentType();
-
-        ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccountByUserId("123");
+        Long userId = AppSecurityUtils.getCurrentUserId().orElse(null);
+        ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccountByUserId(userId.toString());
         Order order = Order.builder()
                 .accountId(accountResponse.getBody().getAccountId())
                 .paymentType(orderDto.getPaymentType())
@@ -136,6 +137,6 @@ public class OrderServiceImpl implements OrderService {
         for (Double aDouble : productCost) {
             cost = cost + aDouble;
         }
-        return  cost;
+        return cost;
     }
 }
