@@ -6,5 +6,5 @@ public interface BankAccountService {
 
     BankAccountDto save(BankAccountDto bankAccountDto);
 
-    Boolean verifyPurchase(BankAccountDto bankAccountDto);
+    Boolean checkBankAccount(BankAccountDto bankAccountDto);
 }

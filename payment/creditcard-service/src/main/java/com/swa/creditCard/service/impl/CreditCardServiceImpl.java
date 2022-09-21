@@ -29,28 +29,36 @@ public class CreditCardServiceImpl implements CreditCardService {
         return creditCardDto;
     }
 
-    public boolean verifyPurchase(CreditCardDto creditCardDto) {
+    public boolean checkCreditCard(CreditCardDto creditCardDto) {
         Optional<CreditCard> creditCardOpt= creditCardRepo.findCreditCardByCardNumberAndExpiryDateAndCcv(creditCardDto.getCardNumber(), creditCardDto.getExpiryDate(), creditCardDto.getCcv());
 
+        if(!validateCreditCard(creditCardOpt, creditCardDto)) return false;
+        return updateChanges(creditCardOpt.get(), creditCardDto);
+
+    }
+
+    private boolean validateCreditCard(Optional<CreditCard> creditCardOpt, CreditCardDto creditCardDto) {
+
         if(!creditCardOpt.isPresent()) {
-            System.out.println("Invalid card");
+            System.out.println("Invalid card !!");
             return false;
         }
 
         CreditCard creditCard = creditCardOpt.get();
-        LocalDate cardExpiryDate= creditCard.getExpiryDate();
-        LocalDate todayDate= LocalDate.now();
-        if(cardExpiryDate.isBefore(todayDate)) {
-            System.out.println("Card has expired");
+        if(creditCard.getExpiryDate().isBefore(LocalDate.now())) {
+            System.out.println("Card has expired.");
             return  false;
         }
 
-        Double purchaseBalance= creditCardDto.getBalance();
-        Double totalNewBalance=  purchaseBalance + creditCard.getBalance();
-        if(creditCard.getCardLimit()< totalNewBalance) {
-            System.out.println("Limitation of card has been exceed");
+        if(creditCard.getCardLimit()< creditCardDto.getBalance() + creditCard.getBalance()) {
+            System.out.println("Limitation of card has been exceeded.");
             return false;
         }
+        return true;
+    }
+
+    private boolean updateChanges(CreditCard creditCard, CreditCardDto creditCardDto) {
+        Double totalNewBalance=  creditCardDto.getBalance() + creditCard.getBalance();
         creditCard.setBalance(totalNewBalance);
         creditCardRepo.save(creditCard);
         return true;
