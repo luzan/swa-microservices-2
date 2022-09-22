@@ -14,15 +14,15 @@ public class CreditCardController {
     private CreditCardService creditCardService;
 
     @PostMapping
-    public ResponseEntity<?> saveCrditCard(@RequestBody CreditCardDto creditCardDto){
+    public ResponseEntity<?> saveCreditCard(@RequestBody CreditCardDto creditCardDto){
         ResponseEntity<?> response= new ResponseEntity<>(creditCardService.saveCreditCard(creditCardDto), HttpStatus.OK);
         return response;
     }
 
 
     @PostMapping("/verify-purchase")
-    public ResponseEntity<?> verifyPurchase(@RequestBody CreditCardDto creditCardDto) {
-        ResponseEntity<?> response = new ResponseEntity<>(creditCardService.verifyPurchase(creditCardDto), HttpStatus.OK);
+    public ResponseEntity<?> checkCreditCard(@RequestBody CreditCardDto creditCardDto) {
+        ResponseEntity<?> response = new ResponseEntity<>(creditCardService.checkCreditCard(creditCardDto), HttpStatus.OK);
         return response;
     }
 

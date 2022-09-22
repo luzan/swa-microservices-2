@@ -6,7 +6,6 @@ import com.swa.bankAccount.model.BankAccount;
 import com.swa.bankAccount.repository.BankAccountRepository;
 import com.swa.bankAccount.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,20 +27,30 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public Boolean verifyPurchase(BankAccountDto bankAccountDto) {
+    public Boolean checkBankAccount(BankAccountDto bankAccountDto) {
         Optional<BankAccount> bankAccountOpt = bankAccountRepository.findBankAccountByAccountTypeAndRoutingNumberAndBankAccountNumber(bankAccountDto.getAccountType(), bankAccountDto.getRoutingNumber(), bankAccountDto.getBankAccountNumber());
+        if(!validateBankAccount(bankAccountOpt, bankAccountDto)) return false;
+        return updateChanges(bankAccountOpt.get(),bankAccountDto);
+    }
+
+    private boolean validateBankAccount(Optional<BankAccount> bankAccountOpt, BankAccountDto bankAccountDto) {
         if(!bankAccountOpt.isPresent()){
-            System.out.println("Invalid account");
+            System.out.println("Invalid account !!");
             return false;
         }
 
         BankAccount bankAccount = bankAccountOpt.get();
         Double availableBalance = bankAccount.getBalance()-bankAccountDto.getBalance();
         if(availableBalance < 0){
-            System.out.println("Insufficient balance to purchase item");
+            System.out.println("Insufficient balance to purchase item.");
             return false;
         }
 
+        return true;
+    }
+
+    private boolean updateChanges(BankAccount bankAccount, BankAccountDto bankAccountDto) {
+        Double availableBalance = bankAccount.getBalance()-bankAccountDto.getBalance();
         bankAccount.setBalance(availableBalance);
         bankAccountRepository.save(bankAccount);
         return true;
