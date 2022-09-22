@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: account-service
+  name: paypal-service
 spec:
   selector:
-    app: account-app
+    app: paypal-service
   ports:
     - port: 80
-      nodePort: 30082 # exposing to local, to access this service
-      targetPort: 8080
+      nodePort: 30086 # exposing to local, to access this service
+      targetPort: 8086
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -19,17 +19,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: paypal-app
+      app: paypal-service
   template:
     metadata:
       labels:
-        app: paypal-app
+        app: paypal-service
     spec:
       containers:
-        - name: paypal-app
+        - name: paypal-service
           image: proj2_paypal-service
           ports:
-            - containerPort: 8080
+            - containerPort: 8086
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod

@@ -4,11 +4,11 @@ metadata:
   name: credit-service
 spec:
   selector:
-    app: credit-app
+    app: credit-service
   ports:
     - port: 80
-      nodePort: 30082 # exposing to local, to access this service
-      targetPort: 8080
+      nodePort: 30085 # exposing to local, to access this service
+      targetPort: 8085
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -19,17 +19,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: credit-app
+      app: credit-service
   template:
     metadata:
       labels:
-        app: account-app
+        app: credit-service
     spec:
       containers:
-        - name: credit-app
+        - name: credit-service
           image: proj2_credit-service
           ports:
-            - containerPort: 8080
+            - containerPort: 8085
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
