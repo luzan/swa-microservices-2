@@ -23,20 +23,28 @@ public class PaypalServiceImpl implements PaypalService {
         return paypalDto;
     }
 
-    public boolean verifyPurchase(PaypalDto paypalDto) {
-        Optional<Paypal> paypalOptional = paypalRepo.findByEmailAddressAndSecureKey(paypalDto.getEmailAddress(), paypalDto.getSecureKey());
-        if (paypalOptional.isEmpty()) {
-            System.out.println("Invalid account");
+    public boolean checkPaypal(PaypalDto paypalDto) {
+        Optional<Paypal> paypalOpt = paypalRepo.findByEmailAddressAndSecureKey(paypalDto.getEmailAddress(), paypalDto.getSecureKey());
+        if(!validatePaypal(paypalOpt, paypalDto)) return false;
+        return updateChanges(paypalOpt.get(), paypalDto);
+    }
+
+    private boolean validatePaypal(Optional<Paypal> paypalOpt, PaypalDto paypalDto) {
+        if (paypalOpt.isEmpty()) {
+            System.out.println("Invalid account !!");
             return false;
         }
 
-        Paypal paypal = paypalOptional.get();
+        if (paypalOpt.get().getBalance() - paypalDto.getBalance() < 0) {
+            System.out.println("Insufficient balance to purchase item.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean updateChanges(Paypal paypal, PaypalDto paypalDto) {
         Double balance = paypal.getBalance() - paypalDto.getBalance();
-        if (balance < 0) {
-            System.out.println("Insufficient balance to purchase item");
-            return false;
-        }
-
         paypal.setBalance(balance);
         paypalRepo.save(paypal);
         return true;
