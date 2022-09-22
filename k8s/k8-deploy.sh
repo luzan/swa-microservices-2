@@ -1,6 +1,8 @@
 
-kubectl create -f configs-secrets
+kubectl create -f secrets
 
-kubectl create -f db
+kubectl apply -f appcore
+
+#kubectl create -f db
 
 kubectl create -f services

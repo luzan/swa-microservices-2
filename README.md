@@ -2,6 +2,50 @@
 ![Mind Map](docs/SWA%20Microservice.jpg)
 
 ## # How to run ? _Options:_  
+
+```cmd
+mvn clean install -DskipTests
+
+# If minkiube, also run -> minikube docker-env
+docker compose build
+
+kubectl create -f k8s/configs-secrets
+kubectl create -f k8s/appcore
+kubectl create -f services
+kubectl create -f k8s/gateways
+
+# add "192.168.49.2 backend.minikube.local" to /etc/host
+sudo nano /etc/hosts
+
+==========================
+127.0.0.1	localhost
+192.168.49.2 backend.minikube.local
+==========================
+```
+
+Testing
+```
+# This is for create user
+
+curl --location --request POST 'http://backend.minikube.local/auth/create-user' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "fullName": "Test user",
+    "email": "test1",
+    "password": "test1"
+}'
+
+# This is for Login
+
+curl --location --request POST 'http://backend.minikube.local/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "test1",
+    "password": "test1"
+}'
+```
+
+
 __Development:__
 1. Running Single Service at a time:
    - __If Using IDE (Using IntelliJ)__: Run each services by clicking their "run" icon
