@@ -79,3 +79,21 @@
 > - Either update on Trello: [https://trello.com/b/YQffoOQR/miniproject-2](https://trello.com/b/YQffoOQR/miniproject-2)
 > - Or mentioned it on readme [TODO.md](./TODO.md)
 > - Or mentioned it on the teams
+> 
+> 
+> 
+> 
+> mvn clean install
+> minikube docker-env 
+> // optional when images is to be used from local repo, 
+> needs to run eval and run following commands on same terminal
+> docker compose build --no-cache
+> 
+> Go inside k8 and run files
+> 
+> kubectl create -f config-secrets/
+> kubectl create -f db/
+> kubectl create -f services/
+> 
+> minikube service --all
+> 

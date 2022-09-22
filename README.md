@@ -1,7 +1,16 @@
 ### Mind Map
 ![Mind Map](docs/SWA%20Microservice.jpg)
 
-## # How to run ? _Options:_  
+## How to run ? 
+_Options:_  
+
+__Production__
+
+```shell
+sh build.sh
+cd k8s
+sh k8-deploy.sh
+```
 __Development:__
 1. Running Single Service at a time:
    - __If Using IDE (Using IntelliJ)__: Run each services by clicking their "run" icon
